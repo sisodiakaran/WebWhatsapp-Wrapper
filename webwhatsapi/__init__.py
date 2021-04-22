@@ -186,6 +186,7 @@ class WhatsAPIDriver(object):
         extra_params=None,
         chrome_options=None,
         executable_path=None,
+        session_id=None
     ):
         """Initialises the webdriver"""
 
@@ -276,6 +277,10 @@ class WhatsAPIDriver(object):
                 desired_capabilities=capabilities,
                 **extra_params,
             )
+            
+            if session_id:
+                self.driver.close()
+                self.driver.session_id = session_id
 
         else:
             self.logger.error("Invalid client: %s" % client)
@@ -287,6 +292,10 @@ class WhatsAPIDriver(object):
 
         if autoconnect:
             self.connect()
+            
+            
+    def get_session_id(self):
+        return self.driver.session_id
 
     def connect(self):
         self.driver.get(self._URL)
