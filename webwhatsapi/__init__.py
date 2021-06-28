@@ -89,7 +89,7 @@ class WhatsAPIDriver(object):
         "UnreadChatBanner": ".message-list",
         "ReconnectLink": ".action",
         "WhatsappQrIcon": "span.icon:nth-child(2)",
-        "QRReloader": "div[data-ref] > span > div",
+        "QRReloader": "div[data-ref] > span > button > div",
         "OpenHereButton": "div[data-animate-modal-body=true] div[role=button]:nth-child(2)",
     }
 
@@ -331,6 +331,9 @@ class WhatsAPIDriver(object):
             return False
 
     def get_qr_plain(self):
+        if "Click to reload QR code" in self.driver.page_source:
+            self.reload_qr()
+        
         return self.driver.find_element_by_css_selector(
             self._SELECTORS["qrCodePlain"]
         ).get_attribute("data-ref")
